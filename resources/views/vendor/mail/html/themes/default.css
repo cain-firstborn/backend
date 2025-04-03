@@ -1,0 +1,312 @@
+/* Base */
+body,
+body *:not(html):not(style):not(br):not(tr):not(code) {
+    font-family : 'Source Sans 3', sans-serif;
+    position    : relative;
+    box-sizing  : border-box;
+}
+
+body {
+    line-height              : 1.4;
+    width                    : 100% !important;
+    height                   : 100%;
+    margin                   : 0;
+    padding                  : 1rem;
+    color                    : #bebebe;
+    background               : #000000;
+    -webkit-text-size-adjust : none;
+}
+
+p,
+ul,
+ol,
+blockquote {
+    line-height : 1.4;
+    text-align  : left;
+}
+
+a {
+    color : #0251ba;
+}
+
+a img {
+    border : none;
+}
+
+/* Typography */
+h1 {
+    font-size   : 1rem;
+    font-weight : bold;
+    margin-top  : 0;
+    text-align  : left;
+    color       : #ffffff;
+}
+
+h2 {
+    font-size   : 1rem;
+    font-weight : bold;
+    margin-top  : 0;
+    text-align  : left;
+}
+
+h3 {
+    font-size   : 0.875rem;
+    font-weight : bold;
+    margin-top  : 0;
+    text-align  : left;
+}
+
+p {
+    font-size   : 1rem;
+    line-height : 1.5em;
+    margin-top  : 0;
+    text-align  : left;
+}
+
+p.sub {
+    font-size : 0.75rem;
+}
+
+img {
+    max-width : 100%;
+}
+
+/* Layout */
+.wrapper {
+    -premailer-width       : 100%;
+    width                  : 100%;
+    margin                 : 0;
+    padding                : 0;
+    -premailer-cellpadding : 0;
+    -premailer-cellspacing : 0;
+}
+
+.content {
+    -premailer-width       : 100%;
+    width                  : 100%;
+    margin                 : 0;
+    padding                : 0;
+    -premailer-cellpadding : 0;
+    -premailer-cellspacing : 0;
+}
+
+/* Header */
+.header {
+    padding    : 1.5rem 0;
+    text-align : center;
+}
+
+.header a {
+    font-size       : 1.25rem;
+    font-weight     : bold;
+    text-decoration : none;
+    color           : #3d4852;
+}
+
+/* Logo */
+.logo {
+    width : 5rem;
+}
+
+/* Body */
+.body {
+    -premailer-width       : 100%;
+    width                  : 100%;
+    margin                 : 0;
+    padding                : 0;
+    border-top             : 1px solid #bebebe;
+    border-bottom          : 1px solid #bebebe;
+    -premailer-cellpadding : 0;
+    -premailer-cellspacing : 0;
+}
+
+.inner-body {
+    -premailer-width       : 36rem;
+    width                  : 36rem;
+    margin                 : 0 auto;
+    padding                : 0;
+    border-width           : 1px;
+    border-color           : rgba(190, 190, 190, 0.1);
+    border-radius          : 1rem;
+    background-color       : #ffffff;
+    box-shadow             : 0 0.125rem 0 rgba(0, 0, 150, 0.025), 0.125rem 0.25rem 0 rgba(0, 0, 150, 0.015);
+    -premailer-cellpadding : 0;
+    -premailer-cellspacing : 0;
+}
+
+.inner-body a {
+    word-break : break-all;
+}
+
+/* Subcopy */
+.subcopy {
+    margin-top  : 1.5rem;
+    padding-top : 1.5rem;
+    border-top  : 1px solid rgba(190, 190, 190, 0.1);
+}
+
+.subcopy p {
+    font-size : 0.875rem;
+}
+
+.subcopy a {
+    text-decoration : underline;
+    color           : #ffffff;
+}
+
+/* Footer */
+.footer {
+    -premailer-width       : 36rem;
+    width                  : 36rem;
+    margin                 : 0 auto;
+    padding                : 0;
+    text-align             : center;
+    -premailer-cellpadding : 0;
+    -premailer-cellspacing : 0;
+}
+
+.footer p {
+    font-size     : 0.75rem;
+    margin-bottom : 0;
+    text-align    : center;
+    color         : #bebebe;
+}
+
+.footer p + p {
+    margin-bottom : 1rem;
+}
+
+.footer a {
+    text-decoration : underline;
+    color           : #bebebe;
+}
+
+/* Tables */
+.table table {
+    -premailer-width       : 100%;
+    width                  : 100%;
+    margin                 : 2rem auto;
+    -premailer-cellpadding : 0;
+    -premailer-cellspacing : 0;
+}
+
+.table th {
+    margin         : 0;
+    padding-bottom : 0.5rem;
+    border-bottom  : 1px solid #edeff2;
+}
+
+.table td {
+    font-size   : 1rem;
+    line-height : 1rem;
+    margin      : 0;
+    padding     : 0.5rem 0;
+    color       : #74787e;
+}
+
+.table-contact td {
+    padding        : 0.25rem;
+    vertical-align : top;
+    color          : #bebebe;
+}
+
+.table-contact td:first-child {
+    padding-left : 0;
+    color        : #ffffff;
+}
+
+.content-cell {
+    max-width : 100vw;
+    padding   : 2rem;
+    color     : #bebebe;
+}
+
+.content-cell p {
+    margin-bottom : 1rem;
+}
+
+.content-cell p + p {
+    margin-bottom : 0;
+}
+
+.body .content-cell {
+    background-color : #000000cc;
+}
+
+/* Buttons */
+.action {
+    float                  : unset;
+    -premailer-width       : 100%;
+    width                  : 100%;
+    margin                 : 2rem auto;
+    padding                : 0;
+    text-align             : center;
+    -premailer-cellpadding : 0;
+    -premailer-cellspacing : 0;
+}
+
+.button {
+    display                  : inline-block;
+    overflow                 : hidden;
+    text-decoration          : none;
+    color                    : #ffffff;
+    border-radius            : 0.25rem;
+    -webkit-text-size-adjust : none;
+}
+
+.button-blue,
+.button-primary {
+    border-top       : 0.5rem solid #0251ba;
+    border-right     : 1rem solid #0251ba;
+    border-bottom    : 0.5rem solid #0251ba;
+    border-left      : 1rem solid #0251ba;
+    background-color : #0251ba;
+}
+
+.button-green,
+.button-success {
+    border-top       : 0.5rem solid #41c980;
+    border-right     : 1rem solid #41c980;
+    border-bottom    : 0.5rem solid #41c980;
+    border-left      : 1rem solid #41c980;
+    background-color : #41c980;
+}
+
+.button-red,
+.button-error {
+    border-top       : 0.5rem solid #e53e3e;
+    border-right     : 1rem solid #e53e3e;
+    border-bottom    : 0.5rem solid #e53e3e;
+    border-left      : 1rem solid #e53e3e;
+    background-color : #e53e3e;
+}
+
+/* Panels */
+.panel {
+    margin      : 1.25rem 0;
+    border-left : #2d3748 solid 0.25rem;
+}
+
+.panel-content {
+    padding          : 1rem;
+    color            : #718096;
+    background-color : #edf2f7;
+}
+
+.panel-content p {
+    color : #718096;
+}
+
+.panel-item {
+    padding : 0;
+}
+
+.panel-item p:last-of-type {
+    margin-bottom  : 0;
+    padding-bottom : 0;
+}
+
+/* Utilities */
+.break-all {
+    word-break : break-all;
+}

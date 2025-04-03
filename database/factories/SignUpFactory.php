@@ -2,13 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\SignUp;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<SignUp>
  */
-class UserFactory extends Factory
+class SignUpFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +19,8 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'email' => $this->faker->unique()->safeEmail(),
+            'user_id'    => User::factory(),
+            'created_at' => now()->subDays(rand(1, 30)),
         ];
     }
 }
