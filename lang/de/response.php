@@ -17,4 +17,8 @@ return [
         'created' => 'Benutzer erfolgreich erstellt',
     ],
 
+    'contact' => [
+        'submitted' => 'Kontaktanfrage erfolgreich übermittelt',
+    ],
+
 ];
