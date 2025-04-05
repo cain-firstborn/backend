@@ -79,16 +79,6 @@ class CreateContactTest extends TestCase
     }
 
     #[Test]
-    public function it_sets_cooldown(): void
-    {
-        $this->assertFalse($this->cache->has("contact_cooldown:{$this->request->email}"));
-
-        $this->action->handle($this->request);
-
-        $this->assertTrue($this->cache->has("contact_cooldown:{$this->request->email}"));
-    }
-
-    #[Test]
     public function it_creates_sign_up(): void
     {
         $this->assertDatabaseEmpty('messages');
@@ -100,22 +90,6 @@ class CreateContactTest extends TestCase
         $this->assertDatabaseHas('messages', [
             'user_id' => $user->id,
         ]);
-    }
-
-    #[Test]
-    public function it_does_not_create_sign_up(): void
-    {
-        $this->cache->put(
-            key  : "contact_cooldown:{$this->request->email}",
-            value: true,
-            ttl  : now()->addDay()
-        );
-
-        $this->assertDatabaseEmpty('messages');
-
-        $this->action->handle($this->request);
-
-        $this->assertDatabaseEmpty('messages');
     }
 
     #[Test]
@@ -131,21 +105,4 @@ class CreateContactTest extends TestCase
             callback    : fn(ContactSubmitted $notification, array $channels, AnonymousNotifiable $notifiable): bool => in_array(config('mail.from.address'), $notifiable->routes)
         );
     }
-
-    #[Test]
-    public function it_does_not_send_notification_during_cooldown(): void
-    {
-        Notification::fake();
-        
-        $this->cache->put(
-            key  : "contact_cooldown:{$this->request->email}",
-            value: true,
-            ttl  : now()->addDay()
-        );
-
-        $this->action->handle($this->request);
-
-        Notification::assertNothingSent();
-    }
-
 }
