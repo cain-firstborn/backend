@@ -127,36 +127,6 @@ class ContactTest extends TestCase
     }
 
     #[Test]
-    public function it_does_not_creates_new_message_during_cooldown(): void
-    {
-        $this->cache->put(
-            key  : "contact_cooldown:{$this->data['email']}",
-            value: true,
-            ttl  : now()->addDay()
-        );
-
-        $this
-            ->json(
-                method: 'POST',
-                uri   : $this->uri,
-                data  : $this->data
-            )
-            ->assertCreated();
-
-        $this->assertDatabaseCount('messages', 0);
-    }
-
-    #[Test]
-    public function it_creates_new_signup_after_cooldown_expires(): void
-    {
-        $this->it_creates_new_message();
-
-        $this->travel(1)->day();
-
-        $this->it_creates_new_message();
-    }
-
-    #[Test]
     public function it_sends_a_notification_to_support(): void
     {
         Notification::fake();
@@ -174,40 +144,6 @@ class ContactTest extends TestCase
             notification: ContactSubmitted::class,
             callback    : fn(ContactSubmitted $notification, array $channels, AnonymousNotifiable $notifiable): bool => in_array(config('mail.from.address'), $notifiable->routes)
         );
-
-        $this->assertTrue($this->cache->has("contact_cooldown:{$this->data['email']}"));
-    }
-
-    #[Test]
-    public function it_does_not_send_notification_during_cooldown(): void
-    {
-        Notification::fake();
-
-        $this->cache->put(
-            key  : "contact_cooldown:{$this->data['email']}",
-            value: true,
-            ttl  : now()->addDay()
-        );
-
-        $this
-            ->json(
-                method: 'POST',
-                uri   : $this->uri,
-                data  : $this->data
-            )
-            ->assertCreated();
-
-        Notification::assertNothingSent();
-    }
-
-    #[Test]
-    public function it_resumes_notifications_after_cooldown_expires(): void
-    {
-        $this->it_sends_a_notification_to_support();
-
-        $this->travel(1)->day();
-
-        $this->it_sends_a_notification_to_support();
     }
 
     #[Test]
@@ -215,17 +151,17 @@ class ContactTest extends TestCase
     {
         Notification::fake();
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 6; $i++) {
             $this
                 ->json(
                     method: 'POST',
                     uri   : $this->uri,
                     data  : $this->data
                 )
-                ->assertCreated();
+                ->assertStatus($i < 5 ? Response::HTTP_CREATED : Response::HTTP_TOO_MANY_REQUESTS);
         }
 
-        Notification::assertSentToTimes(new AnonymousNotifiable(), ContactSubmitted::class);
+        Notification::assertSentToTimes(new AnonymousNotifiable(), ContactSubmitted::class, 5);
     }
 
     /**

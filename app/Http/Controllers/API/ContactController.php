@@ -6,10 +6,22 @@ use App\Actions\CreateContactAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\CreateContactRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Symfony\Component\HttpFoundation\Response;
 
-class ContactController extends Controller
+class ContactController extends Controller implements HasMiddleware
 {
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return [
+            ThrottleRequests::with(5, 1),
+        ];
+    }
+
     /**
      * Handle the incoming request.
      */
