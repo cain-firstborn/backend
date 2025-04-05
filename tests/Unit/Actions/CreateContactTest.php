@@ -27,11 +27,6 @@ class CreateContactTest extends TestCase
     private CreateContactAction $action;
 
     /**
-     * Test Cache instance.
-     */
-    private CacheManager $cache;
-
-    /**
      * Test Form Request instance.
      */
     private CreateContactRequest $request;
