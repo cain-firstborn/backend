@@ -9,9 +9,11 @@ use Illuminate\Notifications\Messages\MailMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use Tests\Traits\WithTranslator;
 
 class UserSignedUpTest extends TestCase
 {
+    use WithTranslator;
     use LazilyRefreshDatabase;
 
     #[Test]
@@ -26,11 +28,11 @@ class UserSignedUpTest extends TestCase
         $content      = strip_tags($mail->render());
 
         $this->assertInstanceOf(MailMessage::class, $mail);
-        $this->assertEquals(trans('notification.signup.subject'), $mail->subject);
-        $this->assertStringContainsString(trans('notification.hello'), $content);
-        $this->assertStringContainsString(strip_tags(trans('notification.signup.content')), $content);
-        $this->assertStringContainsString(trans('notification.regards'), $content);
-        $this->assertStringContainsString(trans('notification.rights'), $content);
+        $this->assertEquals($this->translator->get('notification.signup.subject'), $mail->subject);
+        $this->assertStringContainsString($this->translator->get('notification.hello'), $content);
+        $this->assertStringContainsString(strip_tags($this->translator->get('notification.signup.content')), $content);
+        $this->assertStringContainsString($this->translator->get('notification.regards'), $content);
+        $this->assertStringContainsString($this->translator->get('notification.rights'), $content);
     }
 
     /**

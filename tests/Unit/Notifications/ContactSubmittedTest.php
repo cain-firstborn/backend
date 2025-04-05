@@ -9,9 +9,11 @@ use Illuminate\Notifications\Messages\MailMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use Tests\Traits\WithTranslator;
 
 class ContactSubmittedTest extends TestCase
 {
+    use WithTranslator;
     use LazilyRefreshDatabase;
 
     #[Test]
@@ -27,15 +29,15 @@ class ContactSubmittedTest extends TestCase
         $content      = strip_tags($mail->render());
 
         $this->assertInstanceOf(MailMessage::class, $mail);
-        $this->assertEquals(strip_tags(trans('notification.contact.subject', ['name' => $message->name])), $mail->subject);
-        $this->assertStringContainsString(strip_tags(trans('notification.contact.greeting')), $content);
+        $this->assertEquals(strip_tags($this->translator->get('notification.contact.subject', ['name' => $message->name])), $mail->subject);
+        $this->assertStringContainsString(strip_tags($this->translator->get('notification.contact.greeting')), $content);
 
         foreach ($attributes as $attribute) {
             $this->assertStringContainsString($attribute, $content);
         }
 
-        $this->assertStringNotContainsString(trans('notification.regards'), $content);
-        $this->assertStringNotContainsString(trans('notification.rights'), $content);
+        $this->assertStringNotContainsString($this->translator->get('notification.regards'), $content);
+        $this->assertStringNotContainsString($this->translator->get('notification.rights'), $content);
     }
 
     /**

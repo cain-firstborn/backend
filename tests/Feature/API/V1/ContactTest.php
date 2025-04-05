@@ -4,11 +4,8 @@ namespace Tests\Feature\API\V1;
 
 use App\Models\User;
 use App\Notifications\ContactSubmitted;
-use Illuminate\Cache\CacheManager;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Notifications\AnonymousNotifiable;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
@@ -16,9 +13,13 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
+use Tests\Traits\WithCache;
+use Tests\Traits\WithTranslator;
 
 class ContactTest extends TestCase
 {
+    use WithCache;
+    use WithTranslator;
     use LazilyRefreshDatabase;
 
     /**
@@ -37,25 +38,6 @@ class ContactTest extends TestCase
         'message' => 'test',
     ];
 
-    /**
-     * Test Cache instance.
-     */
-    private CacheManager $cache;
-
-    /**
-     * Set up the test environment.
-     *
-     * @throws BindingResolutionException
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->cache = app()->make(CacheManager::class);
-
-        Notification::fake();
-    }
-
     #[Test]
     #[DataProvider('scenarios')]
     public function it_validates_the_request(string $field, mixed $value, string $rule, array $replace = [], int $status = Response::HTTP_UNPROCESSABLE_ENTITY): void
@@ -68,7 +50,7 @@ class ContactTest extends TestCase
                     $field => $value,
                 ]
             )
-            ->assertSee(trans("validation.$rule", ['attribute' => $field, ...$replace]))
+            ->assertSee($this->translator->get("validation.$rule", ['attribute' => $field, ...$replace]))
             ->assertStatus($status);
     }
 
@@ -86,7 +68,7 @@ class ContactTest extends TestCase
                 uri   : $this->uri,
                 data  : $this->data,
             )
-            ->assertSee(trans('response.contact.submitted'))
+            ->assertSee($this->translator->get('response.contact.submitted'))
             ->assertCreated();
 
         DB::disableQueryLog();
@@ -94,7 +76,7 @@ class ContactTest extends TestCase
         $this->assertDatabaseCount('users', 1);
         $this->assertDatabaseHas('users', ['email' => $this->data['email']]);
         $this->assertTrue($this->cache->has("user:{$this->data['email']}"));
-        $this->assertEquals($this->data['email'], Cache::get("user:{$this->data['email']}")->email);
+        $this->assertEquals($this->data['email'], $this->cache->get("user:{$this->data['email']}")->email);
         $this->assertContains('insert into "users" ("email", "updated_at", "created_at") values (?, ?, ?)', array_column(DB::getQueryLog(), 'query'));
     }
 
@@ -114,7 +96,7 @@ class ContactTest extends TestCase
                 uri   : $this->uri,
                 data  : $this->data
             )
-            ->assertSee(trans('response.contact.submitted'))
+            ->assertSee($this->translator->get('response.contact.submitted'))
             ->assertCreated();
 
         DB::disableQueryLog();

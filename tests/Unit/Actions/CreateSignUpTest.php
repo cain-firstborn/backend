@@ -6,26 +6,24 @@ use App\Actions\CreateSignUpAction;
 use App\Http\Requests\API\CreateSignUpRequest;
 use App\Models\User;
 use App\Notifications\UserSignedUp;
-use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use Tests\Traits\WithCache;
 
 class CreateSignUpTest extends TestCase
 {
+    use WithCache;
+    use WithFaker;
     use LazilyRefreshDatabase;
 
     /**
      * Test Action class instance.
      */
     private CreateSignUpAction $action;
-
-    /**
-     * Test Cache instance.
-     */
-    private CacheManager $cache;
 
     /**
      * Test Form Request instance.
@@ -41,15 +39,13 @@ class CreateSignUpTest extends TestCase
     {
         parent::setUp();
 
-        $this->action  = $this->app->make(CreateSignUpAction::class);
-        $this->cache   = $this->app->make(CacheManager::class);
+        $this->action = $this->app->make(CreateSignUpAction::class);
+
         $this->request = new CreateSignUpRequest([
-            'email' => 'email@example.com',
+            'email' => $this->faker->email,
         ]);
 
         $this->request->setContainer($this->app)->validateResolved();
-
-        Notification::fake();
     }
 
     #[Test]
@@ -122,6 +118,8 @@ class CreateSignUpTest extends TestCase
     #[Test]
     public function it_sends_notification(): void
     {
+        Notification::fake();
+
         $this->action->handle($this->request);
 
         $user = User::query()->firstWhere('email', $this->request->email);
@@ -132,6 +130,8 @@ class CreateSignUpTest extends TestCase
     #[Test]
     public function it_does_not_send_notification_during_cooldown(): void
     {
+        Notification::fake();
+
         $this->cache->put(
             key  : "signup_cooldown:{$this->request->email}",
             value: true,
@@ -142,5 +142,4 @@ class CreateSignUpTest extends TestCase
 
         Notification::assertNothingSent();
     }
-
 }

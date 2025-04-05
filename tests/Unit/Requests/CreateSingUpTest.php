@@ -8,20 +8,25 @@ use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use Tests\Traits\WithTranslator;
+use Tests\Traits\WithValidator;
 
 class CreateSingUpTest extends TestCase
 {
+    use WithValidator;
+    use WithTranslator;
+
     #[Test]
     #[DataProvider('scenarios')]
     public function it_validates_the_request(string $field, string|null $value, string|null $rule = null, array|null $replace = [], bool $passes = false): void
     {
         $request   = new CreateSignUpRequest([$field => $value]);
-        $validator = Validator::make($request->all(), $request->rules());
+        $validator = $this->validator->make($request->all(), $request->rules());
 
         $this->assertEquals($validator->passes(), $passes);
 
         if ($rule) {
-            $this->assertContains(trans("validation.$rule", ['attribute' => $field, ...$replace]), $validator->errors()->get($field));
+            $this->assertContains($this->translator->get("validation.$rule", ['attribute' => $field, ...$replace]), $validator->errors()->get($field));
         }
     }
 
