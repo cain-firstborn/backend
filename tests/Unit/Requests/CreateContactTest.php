@@ -3,25 +3,29 @@
 namespace Tests\Unit\Requests;
 
 use App\Http\Requests\API\CreateContactRequest;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use Tests\Traits\WithTranslator;
+use Tests\Traits\WithValidator;
 
 class CreateContactTest extends TestCase
 {
+    use WithValidator;
+    use WithTranslator;
+
     #[Test]
     #[DataProvider('scenarios')]
     public function it_validates_the_request(string $field, mixed $value, string|null $rule, array|null $replace = []): void
     {
         $request   = new CreateContactRequest([$field => $value]);
-        $validator = Validator::make($request->all(), $request->rules());
+        $validator = $this->validator->make($request->all(), $request->rules());
 
         $this->assertFalse($validator->passes());
 
         if ($rule) {
-            $this->assertContains(trans("validation.$rule", ['attribute' => $field, ...$replace]), $validator->errors()->get($field));
+            $this->assertContains($this->translator->get("validation.$rule", ['attribute' => $field, ...$replace]), $validator->errors()->get($field));
         }
     }
 
@@ -34,7 +38,7 @@ class CreateContactTest extends TestCase
             'message' => 'test',
         ]);
 
-        $validator = Validator::make($request->all(), $request->rules());
+        $validator = $this->validator->make($request->all(), $request->rules());
 
         $this->assertTrue($validator->passes());
     }

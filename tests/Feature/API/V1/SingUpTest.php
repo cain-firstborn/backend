@@ -4,8 +4,6 @@ namespace Tests\Feature\API\V1;
 
 use App\Models\User;
 use App\Notifications\UserSignedUp;
-use Illuminate\Cache\CacheManager;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
@@ -14,9 +12,13 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
+use Tests\Traits\WithCache;
+use Tests\Traits\WithTranslator;
 
 class SingUpTest extends TestCase
 {
+    use WithCache;
+    use WithTranslator;
     use LazilyRefreshDatabase;
 
     /**
@@ -32,23 +34,6 @@ class SingUpTest extends TestCase
      * @var string
      */
     private string $uri = '/v1/sign-up';
-
-    /**
-     * Test Cache instance.
-     */
-    private CacheManager $cache;
-
-    /**
-     * Set up the test environment.
-     *
-     * @throws BindingResolutionException
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->cache = $this->app->make(CacheManager::class);
-    }
 
     #[Test]
     #[DataProvider('scenarios')]

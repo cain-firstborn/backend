@@ -6,16 +6,19 @@ use App\Actions\CreateContactAction;
 use App\Http\Requests\API\CreateContactRequest;
 use App\Models\User;
 use App\Notifications\ContactSubmitted;
-use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use Tests\Traits\WithCache;
 
 class CreateContactTest extends TestCase
 {
+    use WithCache;
+    use WithFaker;
     use LazilyRefreshDatabase;
 
     /**
@@ -42,17 +45,15 @@ class CreateContactTest extends TestCase
     {
         parent::setUp();
 
-        $this->action  = $this->app->make(CreateContactAction::class);
-        $this->cache   = $this->app->make(CacheManager::class);
+        $this->action = $this->app->make(CreateContactAction::class);
+
         $this->request = new CreateContactRequest([
-            'name'    => 'Test',
-            'email'   => 'email@example.com',
-            'message' => 'Test',
+            'name'    => $this->faker->name,
+            'email'   => $this->faker->email,
+            'message' => $this->faker->text,
         ]);
 
         $this->request->setContainer($this->app)->validateResolved();
-
-        Notification::fake();
     }
 
     #[Test]
@@ -125,6 +126,8 @@ class CreateContactTest extends TestCase
     #[Test]
     public function it_sends_notification(): void
     {
+        Notification::fake();
+
         $this->action->handle($this->request);
 
         Notification::assertSentTo(
