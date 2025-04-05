@@ -135,6 +135,8 @@ class CreateContactTest extends TestCase
     #[Test]
     public function it_does_not_send_notification_during_cooldown(): void
     {
+        Notification::fake();
+        
         $this->cache->put(
             key  : "contact_cooldown:{$this->request->email}",
             value: true,
