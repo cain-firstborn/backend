@@ -15,7 +15,7 @@ use Tests\TestCase;
 use Tests\Traits\WithCache;
 use Tests\Traits\WithTranslator;
 
-class SingUpTest extends TestCase
+class SingUpControllerTest extends TestCase
 {
     use WithCache;
     use WithTranslator;
@@ -124,7 +124,7 @@ class SingUpTest extends TestCase
         $user = User::query()->firstWhere('email', $this->email);
 
         $this->assertDatabaseHas('sign_ups', ['user_id' => $user->id]);
-        $this->assertTrue($user->signings->isNotEmpty());
+        $this->assertTrue($user->signups->isNotEmpty());
     }
 
     #[Test]
