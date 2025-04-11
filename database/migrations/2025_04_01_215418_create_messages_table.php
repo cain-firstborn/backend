@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\User::class)->index();
-            $table->string('name');
-            $table->text('message');
+            $table->string('name')->index();
+            $table->text('message')->index();
             $table->timestamp('created_at');
         });
     }
