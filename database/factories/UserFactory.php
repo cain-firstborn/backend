@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<User>
@@ -18,7 +19,8 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'email' => $this->faker->unique()->safeEmail(),
+            'email'      => Str::replaceMatches('/\d+/', '', $this->faker->unique()->safeEmail()),
+            'created_at' => now()->subDays(rand(1, 30)),
         ];
     }
 }

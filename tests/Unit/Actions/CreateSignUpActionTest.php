@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\WithCache;
 
-class CreateSignUpTest extends TestCase
+class CreateSignUpActionTest extends TestCase
 {
     use WithCache;
     use WithFaker;

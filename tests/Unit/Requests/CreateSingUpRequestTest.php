@@ -11,7 +11,7 @@ use Tests\TestCase;
 use Tests\Traits\WithTranslator;
 use Tests\Traits\WithValidator;
 
-class CreateSingUpTest extends TestCase
+class CreateSingUpRequestTest extends TestCase
 {
     use WithValidator;
     use WithTranslator;

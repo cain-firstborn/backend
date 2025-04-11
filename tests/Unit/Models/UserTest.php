@@ -44,13 +44,13 @@ class UserTest extends TestCase
     }
 
     #[Test]
-    public function it_has_many_signings(): void
+    public function it_has_many_signups(): void
     {
-        $user    = User::factory()->create();
-        $singing = SignUp::factory()->for($user)->create();
+        $user   = User::factory()->create();
+        $singup = SignUp::factory()->for($user)->create();
 
-        $this->assertTrue($user->signings->contains($singing));
-        $this->assertEquals(1, $user->signings->count());
-        $this->assertInstanceOf(Collection::class, $user->signings);
+        $this->assertTrue($user->signups->contains($singup));
+        $this->assertEquals(1, $user->signups->count());
+        $this->assertInstanceOf(Collection::class, $user->signups);
     }
 }
