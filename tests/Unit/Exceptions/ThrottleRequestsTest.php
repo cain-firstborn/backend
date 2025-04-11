@@ -1,6 +1,6 @@
 <?php
 
-namespace Exceptions;
+namespace Tests\Unit\Exceptions;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Exceptions\Handler;

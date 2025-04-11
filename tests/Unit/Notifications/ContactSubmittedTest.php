@@ -23,8 +23,7 @@ class ContactSubmittedTest extends TestCase
         $this->app->setLocale($locale);
 
         $message      = Message::factory()->make();
-        $attributes   = $message->only('name', 'message');
-        $notification = new ContactSubmitted(...['email' => 'email@example.com', ...$attributes]);
+        $notification = new ContactSubmitted($message);
         $mail         = $notification->toMail();
         $content      = strip_tags($mail->render());
 
@@ -32,7 +31,7 @@ class ContactSubmittedTest extends TestCase
         $this->assertEquals(strip_tags($this->translator->get('notification.contact.subject', ['name' => $message->name])), $mail->subject);
         $this->assertStringContainsString(strip_tags($this->translator->get('notification.contact.greeting')), $content);
 
-        foreach ($attributes as $attribute) {
+        foreach ($message->only('name', 'message') as $attribute) {
             $this->assertStringContainsString($attribute, $content);
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Message;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -14,7 +15,7 @@ class ContactSubmitted extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(public string $name, public string $email, public string $message)
+    public function __construct(public Message $message)
     {
         //
     }
@@ -35,7 +36,7 @@ class ContactSubmitted extends Notification
     public function toMail(): MailMessage
     {
         return (new MailMessage)
-            ->subject(trans('notification.contact.subject', ['name' => $this->name]))
+            ->subject(trans('notification.contact.subject', ['name' => $this->message->name]))
             ->greeting(trans('notification.contact.greeting'))
             ->line($this->table())
             ->markdown('notifications::email', [
@@ -52,9 +53,9 @@ class ContactSubmitted extends Notification
     protected function table(): HtmlString
     {
         return new HtmlString(trans('notification.contact.table', [
-            'name'    => $this->name,
-            'email'   => $this->email,
-            'message' => $this->message,
+            'name'    => $this->message->name,
+            'email'   => $this->message->user->email,
+            'message' => $this->message->message,
         ]));
     }
 }

@@ -10,7 +10,7 @@ use Tests\TestCase;
 use Tests\Traits\WithTranslator;
 use Tests\Traits\WithValidator;
 
-class CreateContactTest extends TestCase
+class CreateContactRequestTest extends TestCase
 {
     use WithValidator;
     use WithTranslator;
