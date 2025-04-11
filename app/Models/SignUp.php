@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int             $id
  * @property int             $user_id
  * @property CarbonInterface $created_at
+ * @property User            $user
  */
 class SignUp extends Model
 {

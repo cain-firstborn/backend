@@ -1,23 +1,25 @@
 <?php
 
-namespace Actions;
+namespace Tests\Unit\Actions;
 
 use App\Actions\CreateContactAction;
 use App\Http\Requests\API\CreateContactRequest;
+use App\Models\Admin;
 use App\Models\User;
 use App\Notifications\ContactSubmitted;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Tests\Traits\WithCache;
+use Tests\Traits\WithConfig;
 
-class CreateContactTest extends TestCase
+class CreateContactActionTest extends TestCase
 {
     use WithCache;
+    use WithConfig;
     use WithFaker;
     use LazilyRefreshDatabase;
 
@@ -49,6 +51,8 @@ class CreateContactTest extends TestCase
         ]);
 
         $this->request->setContainer($this->app)->validateResolved();
+
+        Admin::factory()->support()->create();
     }
 
     #[Test]
@@ -99,10 +103,6 @@ class CreateContactTest extends TestCase
 
         $this->action->handle($this->request);
 
-        Notification::assertSentTo(
-            notifiable  : new AnonymousNotifiable(),
-            notification: ContactSubmitted::class,
-            callback    : fn(ContactSubmitted $notification, array $channels, AnonymousNotifiable $notifiable): bool => in_array(config('mail.from.address'), $notifiable->routes)
-        );
+        Notification::assertSentTo(Admin::support(), ContactSubmitted::class);
     }
 }

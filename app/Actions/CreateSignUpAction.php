@@ -23,7 +23,7 @@ class CreateSignUpAction extends Action
                 callback: fn(): User => User::query()->firstOrCreate($request->only('email'))
             );
 
-        $user->signings()->create();
+        $user->signups()->create();
 
         $user->notify(new UserSignedUp());
 

@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string          $name
  * @property string          $message
  * @property CarbonInterface $created_at
+ * @property User            $user
  */
 class Message extends Model
 {

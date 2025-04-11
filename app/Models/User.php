@@ -15,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string              $email
  * @property CarbonInterface     $created_at
  * @property CarbonInterface     $updated_at
- * @property Collection<SignUp>  $signings
+ * @property Collection<SignUp>  $signups
  * @property Collection<Message> $messages
  */
 class User extends Model
@@ -27,7 +27,7 @@ class User extends Model
     /**
      * Sign-Ups that belongs to the User.
      */
-    public function signings(): HasMany
+    public function signups(): HasMany
     {
         return $this->hasMany(SignUp::class);
     }

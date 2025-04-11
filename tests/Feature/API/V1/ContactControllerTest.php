@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\API\V1;
 
+use App\Models\Admin;
 use App\Models\User;
 use App\Notifications\ContactSubmitted;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
-use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
@@ -16,7 +16,7 @@ use Tests\TestCase;
 use Tests\Traits\WithCache;
 use Tests\Traits\WithTranslator;
 
-class ContactTest extends TestCase
+class ContactControllerTest extends TestCase
 {
     use WithCache;
     use WithTranslator;
@@ -37,6 +37,16 @@ class ContactTest extends TestCase
         'email'   => 'test@example.com',
         'message' => 'test',
     ];
+
+    /**
+     * Set up the test environment.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Admin::factory()->support()->create();
+    }
 
     #[Test]
     #[DataProvider('scenarios')]
@@ -139,11 +149,7 @@ class ContactTest extends TestCase
             )
             ->assertCreated();
 
-        Notification::assertSentTo(
-            notifiable  : new AnonymousNotifiable(),
-            notification: ContactSubmitted::class,
-            callback    : fn(ContactSubmitted $notification, array $channels, AnonymousNotifiable $notifiable): bool => in_array(config('mail.from.address'), $notifiable->routes)
-        );
+        Notification::assertSentTo(Admin::support(), ContactSubmitted::class);
     }
 
     #[Test]
@@ -161,7 +167,7 @@ class ContactTest extends TestCase
                 ->assertStatus($i < 5 ? Response::HTTP_CREATED : Response::HTTP_TOO_MANY_REQUESTS);
         }
 
-        Notification::assertSentToTimes(new AnonymousNotifiable(), ContactSubmitted::class, 5);
+        Notification::assertSentToTimes(Admin::support(), ContactSubmitted::class, 5);
     }
 
     /**
