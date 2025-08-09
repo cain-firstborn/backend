@@ -14,7 +14,7 @@ use Tests\TestCase;
 use Tests\Traits\WithTranslator;
 use Throwable;
 
-class ThrottleRequestsTest extends TestCase
+class ThrottleRequestsExceptionTest extends TestCase
 {
     use WithTranslator;
 
