@@ -15,6 +15,7 @@ return [
     'http' => [
         '404' => 'Not Found',
         '403' => 'Unauthorized',
+        '422' => 'Invalid Data Given',
         '429' => 'Too Many Requests',
     ],
 
