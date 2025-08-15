@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Filters;
 use App\Filament\Resources\MessageResource\Pages;
-use App\Filament\Resources\MessageResource\RelationManagers;
 use App\Models\Message;
 use Carbon\Carbon;
 use Filament\Forms;
@@ -16,18 +15,45 @@ use Illuminate\Database\Eloquent\Builder;
 
 class MessageResource extends Resource
 {
+    /**
+     * The model the resource corresponds to.
+     *
+     * @var string|null
+     */
     protected static ?string $model = Message::class;
 
+    /**
+     * The icon to display in the navigation.
+     *
+     * @var string|null
+     */
     protected static ?string $navigationIcon = 'heroicon-o-clipboard';
 
+    /**
+     * The sort order of the resource in the navigation.
+     *
+     * @var int|null
+     */
     protected static ?int $navigationSort = 3;
 
+    /**
+     * Get the base Eloquent query for the resource.
+     *
+     * @return Builder
+     */
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
             ->with('user');
     }
 
+    /**
+     * Configure the form fields.
+     *
+     * @param Form $form
+     *
+     * @return Form
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -48,6 +74,13 @@ class MessageResource extends Resource
             ]);
     }
 
+    /**
+     * Configure the table columns, filters, and actions.
+     *
+     * @param Table $table
+     *
+     * @return Table
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -86,6 +119,11 @@ class MessageResource extends Resource
             ]);
     }
 
+    /**
+     * Get the relationships that should be displayed with the resource.
+     *
+     * @return array
+     */
     public static function getRelations(): array
     {
         return [
@@ -93,6 +131,11 @@ class MessageResource extends Resource
         ];
     }
 
+    /**
+     * Get the resource pages.
+     *
+     * @return array
+     */
     public static function getPages(): array
     {
         return [

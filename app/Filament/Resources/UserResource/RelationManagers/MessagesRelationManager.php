@@ -11,8 +11,20 @@ use Filament\Tables\Table;
 
 class MessagesRelationManager extends RelationManager
 {
+    /**
+     * The name of the relationship this manager handles.
+     *
+     * @var string
+     */
     protected static string $relationship = 'messages';
 
+    /**
+     * Configure the form fields.
+     *
+     * @param Form $form
+     *
+     * @return Form
+     */
     public function form(Form $form): Form
     {
         return $form
@@ -23,6 +35,13 @@ class MessagesRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * Configure the table columns, filters, and actions.
+     *
+     * @param Table $table
+     *
+     * @return Table
+     */
     public function table(Table $table): Table
     {
         return $table
@@ -54,6 +73,11 @@ class MessagesRelationManager extends RelationManager
             ]);
     }
 
+    /**
+     * Determines if the relation is read-only.
+     *
+     * @return bool
+     */
     public function isReadOnly(): bool
     {
         return false;
